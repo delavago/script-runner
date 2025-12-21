@@ -12,8 +12,6 @@ class ScriptInfolist
     {
         return $schema
             ->components([
-                TextEntry::make('uuid')
-                    ->label('UUID'),
                 TextEntry::make('script_name'),
                 TextEntry::make('description')
                     ->placeholder('-'),

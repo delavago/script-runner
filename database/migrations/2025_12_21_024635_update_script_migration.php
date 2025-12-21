@@ -10,14 +10,8 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::create('scripts', function (Blueprint $table) {
-            $table->uuid('id');
-            $table->string('script_name');
-            $table->string('description')->nullable();
+        Schema::table('scripts', function (Blueprint $table) {
             $table->string('file_type');
-            $table->text('file_path');
-            $table->boolean('active')->default(true);
-            $table->timestamps();
         });
     }
 
@@ -26,6 +20,8 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::dropIfExists('scripts');
+        Schema::table('scripts', function (Blueprint $table) {
+            $table->dropColumn('file_type');
+        });
     }
 };

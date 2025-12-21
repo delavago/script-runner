@@ -16,8 +16,6 @@ class ScriptsTable
     {
         return $table
             ->columns([
-                TextColumn::make('uuid')
-                    ->label('UUID'),
                 TextColumn::make('script_name')
                     ->searchable(),
                 TextColumn::make('description')
