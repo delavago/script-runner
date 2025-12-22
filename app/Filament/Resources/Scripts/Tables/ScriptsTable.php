@@ -18,10 +18,6 @@ class ScriptsTable
             ->columns([
                 TextColumn::make('script_name')
                     ->searchable(),
-                TextColumn::make('description')
-                    ->searchable(),
-                TextColumn::make('file_name')
-                    ->searchable(),
                 TextColumn::make('file_type')
                     ->searchable(),
                 IconColumn::make('active')

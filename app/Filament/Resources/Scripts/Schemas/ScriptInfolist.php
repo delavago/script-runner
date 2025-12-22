@@ -15,10 +15,7 @@ class ScriptInfolist
                 TextEntry::make('script_name'),
                 TextEntry::make('description')
                     ->placeholder('-'),
-                TextEntry::make('file_name'),
                 TextEntry::make('file_type'),
-                TextEntry::make('file_path')
-                    ->columnSpanFull(),
                 IconEntry::make('active')
                     ->boolean(),
                 TextEntry::make('created_at')
