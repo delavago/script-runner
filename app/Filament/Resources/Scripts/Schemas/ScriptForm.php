@@ -12,15 +12,6 @@ use Filament\Schemas\Schema;
 class ScriptForm
 {
 
-    public string $fileType = '';
-
-    protected function mutateFormDataBeforeCreate(array $data, $get): array
-    {
-        $data['file_type'] = $get('file_type');
-
-        return $data;
-    }
-
 
     /**
      * Get the file type based on its extension.
@@ -58,14 +49,27 @@ class ScriptForm
                             ->preserveFilenames()
                             ->directory('scripts')
                             ->afterStateUpdated(function (callable $set, $state) {
-                                if ($state !== null && !is_string($state)) {
-                                    $set('file_type', self::deriveFileType($state->getClientOriginalExtension()));
-                                    //set file_type
+                                if ($state !== null) {
+                                    $extension = null;
+
+                                    if (is_string($state)) {
+                                        $extension = pathinfo($state, PATHINFO_EXTENSION);
+                                    } elseif (is_object($state)) {
+                                        if (method_exists($state, 'getClientOriginalExtension')) {
+                                            $extension = $state->getClientOriginalExtension();
+                                        } elseif (method_exists($state, 'getClientOriginalName')) {
+                                            $extension = pathinfo($state->getClientOriginalName(), PATHINFO_EXTENSION);
+                                        }
+                                    }
+
+                                    if ($extension !== null) {
+                                        $set('file_type', self::deriveFileType($extension));
+                                    }
                                 }
                             })
                             ->required(),
                         TextInput::make('file_type')
-                            ->disabled(true)
+                            ->readonly()
                             ->required(),
                     ]),
 
