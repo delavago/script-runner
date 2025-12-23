@@ -22,7 +22,7 @@ class ViewScript extends ViewRecord
                 ->icon('heroicon-o-play')
                 ->color('success')
                 ->requiresConfirmation()
-                ->action(function (Action $action) {
+                ->action(function () {
                     
                     $attachment = is_array($this->record->attachment) 
                         ? $this->record->attachment[0] ?? null 
@@ -46,7 +46,11 @@ class ViewScript extends ViewRecord
                         return;
                     }
 
-                    RunPowershellScript::dispatch($filePath);
+                    RunPowershellScript::dispatch(
+                        $filePath,
+                        $this->record->id,
+                        auth()->id()
+                    );
 
                     Notification::make()
                         ->title('Script queued for execution')

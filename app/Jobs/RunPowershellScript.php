@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Models\ExecutionLog;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -16,13 +17,24 @@ class RunPowershellScript implements ShouldQueue
 
     public function __construct(
         public string $scriptPath,
+        public string $scriptId,
+        public string $userId,
         public array $args = []
     ) {}
 
-    public function handle(string $scriptId): void
+    public function handle(): void
     {
+        Log::info('PowerShell script execution started', [
+            'script_id' => $this->scriptId,
+            'user_id' => $this->userId,
+            'script_path' => $this->scriptPath,
+        ]);
+
         if (!file_exists($this->scriptPath)) {
-            Log::error("PowerShell script not found: {$this->scriptPath}");
+            Log::error("PowerShell script not found: {$this->scriptPath}", [
+                'script_id' => $this->scriptId,
+                'user_id' => $this->userId,
+            ]);
             throw new \RuntimeException("Script not found: {$this->scriptPath}");
         }
 
@@ -41,17 +53,43 @@ class RunPowershellScript implements ShouldQueue
         $process = new Process($command);
         $process->setTimeout(null);
 
-        Log::info('Running PowerShell script: ' . implode(' ', $command));
+        Log::info('Running PowerShell script: ' . implode(' ', $command), [
+            'script_id' => $this->scriptId,
+            'user_id' => $this->userId,
+        ]);
 
-        $process->run(function ($type, $buffer) {
+        $output = '';
+        $process->run(function ($type, $buffer) use (&$output) {
+            $output .= $buffer;
             Log::info($buffer);
         });
 
         if (!$process->isSuccessful()) {
-            Log::error('PowerShell script failed: ' . $process->getErrorOutput());
+            $errorOutput = $process->getErrorOutput();
+            $output .= "\n" . $errorOutput;
+            
+            ExecutionLog::create([
+                'script_logs' => $output,
+                'script_id' => $this->scriptId,
+                'user_id' => $this->userId,
+            ]);
+
+            Log::error('PowerShell script failed: ' . $errorOutput, [
+                'script_id' => $this->scriptId,
+                'user_id' => $this->userId,
+            ]);
             throw new \RuntimeException('PowerShell script failed: ' . $process->getExitCodeText());
         }
 
-        Log::info('PowerShell script finished successfully.');
+        ExecutionLog::create([
+            'script_logs' => $output,
+            'script_id' => $this->scriptId,
+            'user_id' => $this->userId,
+        ]);
+
+        Log::info('PowerShell script finished successfully.', [
+            'script_id' => $this->scriptId,
+            'user_id' => $this->userId,
+        ]);
     }
 }
