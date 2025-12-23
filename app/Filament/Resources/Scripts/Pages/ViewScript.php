@@ -3,11 +3,11 @@
 namespace App\Filament\Resources\Scripts\Pages;
 
 use App\Filament\Resources\Scripts\ScriptResource;
+use App\Jobs\RunPowershellScript;
 use Filament\Actions\Action;
 use Filament\Actions\EditAction;
 use Filament\Notifications\Notification;
 use Filament\Resources\Pages\ViewRecord;
-use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Storage;
 
 class ViewScript extends ViewRecord
@@ -45,24 +45,14 @@ class ViewScript extends ViewRecord
                             ->send();
                         return;
                     }
-                    try {
-                        // Run in background to prevent blocking
-                        dispatch(function () use ($filePath) {
-                            Artisan::call('run:powershell', ['script' => $filePath]);
-                        });
 
-                        Notification::make()
-                            ->title('Script executed successfully')
-                            ->body('Script is running in the background.')
-                            ->success()
-                            ->send();
-                    } catch (\Exception $e) {
-                        Notification::make()
-                            ->title('Script execution failed')
-                            ->body($e->getMessage())
-                            ->danger()
-                            ->send();
-                    }
+                    RunPowershellScript::dispatch($filePath);
+
+                    Notification::make()
+                        ->title('Script queued for execution')
+                        ->body('The PowerShell script is running in the background.')
+                        ->success()
+                        ->send();
                 }),
             EditAction::make(),
         ];
