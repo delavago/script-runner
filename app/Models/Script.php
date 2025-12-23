@@ -28,4 +28,9 @@ class Script extends Model
             'attachment' => 'array',
         ];
     }
+
+    public function executionLogs()
+    {
+        return $this->hasMany(ExecutionLog::class);
+    }
 }

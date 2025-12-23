@@ -19,7 +19,7 @@ class RunPowershellScript implements ShouldQueue
         public array $args = []
     ) {}
 
-    public function handle(): void
+    public function handle(string $scriptId): void
     {
         if (!file_exists($this->scriptPath)) {
             Log::error("PowerShell script not found: {$this->scriptPath}");
