@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\Scripts\Pages;
 
 use App\Filament\Resources\Scripts\ScriptResource;
+use App\Filament\Widgets\ScriptLogs;
 use App\Jobs\RunPowershellScript;
 use Filament\Actions\Action;
 use Filament\Actions\EditAction;
@@ -61,4 +62,12 @@ class ViewScript extends ViewRecord
             EditAction::make(),
         ];
     }
+
+    protected function getFooterWidgets(): array
+    {
+        return [
+            ScriptLogs::make(['scriptId' => $this->record->id]),
+        ];
+    }
+
 }
