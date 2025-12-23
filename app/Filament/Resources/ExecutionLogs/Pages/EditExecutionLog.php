@@ -10,6 +10,7 @@ use Filament\Resources\Pages\EditRecord;
 class EditExecutionLog extends EditRecord
 {
     protected static string $resource = ExecutionLogResource::class;
+    protected ?string $heading = 'View Payment Reminder';
 
     protected function getHeaderActions(): array
     {

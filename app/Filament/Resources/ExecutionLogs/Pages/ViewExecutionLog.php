@@ -9,11 +9,12 @@ use Filament\Resources\Pages\ViewRecord;
 class ViewExecutionLog extends ViewRecord
 {
     protected static string $resource = ExecutionLogResource::class;
+    protected ?string $heading = 'Logs';
 
     protected function getHeaderActions(): array
     {
         return [
-            EditAction::make(),
+            // EditAction::make(),
         ];
     }
 }

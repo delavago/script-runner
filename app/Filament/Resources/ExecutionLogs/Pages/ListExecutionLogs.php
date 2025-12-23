@@ -10,6 +10,7 @@ class ListExecutionLogs extends ListRecords
 {
     protected static string $resource = ExecutionLogResource::class;
 
+    protected ?string $heading = 'Logs';
     protected function getHeaderActions(): array
     {
         return [

@@ -19,6 +19,9 @@ use Filament\Tables\Table;
 class ExecutionLogResource extends Resource
 {
     protected static ?string $model = ExecutionLog::class;
+    protected static ?string $navigationLabel = 'Logs';
+    protected static ?string $breadcrumb = "Logs";
+
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
@@ -50,9 +53,9 @@ class ExecutionLogResource extends Resource
     {
         return [
             'index' => ListExecutionLogs::route('/'),
-            'create' => CreateExecutionLog::route('/create'),
+            // 'create' => CreateExecutionLog::route('/create'),
             'view' => ViewExecutionLog::route('/{record}'),
-            'edit' => EditExecutionLog::route('/{record}/edit'),
+            // 'edit' => EditExecutionLog::route('/{record}/edit'),
         ];
     }
 }

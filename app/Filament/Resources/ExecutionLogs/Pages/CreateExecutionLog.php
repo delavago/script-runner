@@ -8,4 +8,5 @@ use Filament\Resources\Pages\CreateRecord;
 class CreateExecutionLog extends CreateRecord
 {
     protected static string $resource = ExecutionLogResource::class;
+    protected ?string $heading = 'Logs';
 }
