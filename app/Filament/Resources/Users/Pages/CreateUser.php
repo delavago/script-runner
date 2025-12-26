@@ -10,7 +10,7 @@ class CreateUser extends CreateRecord
 {
     protected static string $resource = UserResource::class;
 
-    private string $role="";
+    private string $role="Script Runner";
 
     protected function mutateFormDataBeforeCreate(array $data): array
     {
@@ -22,14 +22,16 @@ class CreateUser extends CreateRecord
             $this->halt();
         }
 
-        $this->role = $data['Role'];
+        // dd($data);
+        $this->role = $data['role'];
         //delete Role from data to prevent error
-        unset($data['Role']);
+        unset($data['role']);
         return $data;
     }
 
     protected function afterCreate(): void
     {
+        // $this->getRecord()->assignRole
         $this->record->assignRole($this->role);
     }
 }

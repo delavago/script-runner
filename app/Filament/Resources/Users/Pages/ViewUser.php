@@ -12,6 +12,8 @@ class ViewUser extends ViewRecord
 
     protected function getHeaderActions(): array
     {
+        // dd($this->record->roles);
+        
         return [
             EditAction::make(),
         ];

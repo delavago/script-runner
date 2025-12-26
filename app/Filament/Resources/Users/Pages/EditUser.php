@@ -22,9 +22,9 @@ class EditUser extends EditRecord
 
     protected function mutateFormDataBeforeSave(array $data): array
     {
-        $this->record->syncRoles([$data['Role']]);
+        $this->record->syncRoles([$data['role']]);
         //delete Role from data to prevent error
-        unset($data['Role']);
+        unset($data['role']);
         if($data['password'] === null){
             unset($data['password']);
         }

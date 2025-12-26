@@ -20,20 +20,20 @@ class UserForm
                 TextInput::make('last_name')
                     ->required(),
                 Select::make('role')
-                    ->options(Role::all()->pluck('name', 'id'))
-                    ->default(fn ($record) => $record?->roles?->first()?->id)
+                    // map the roles from the database to the format {'name' => 'name'}
+                    ->options(Role::all()->pluck('name', 'name')->toArray())
+                    ->default(fn ($record) => $record?->roles?->first()?->name)
                     ->afterStateHydrated(function (Select $component, $state, $record) {
                         if ($record) {
-                            $component->state($record->roles->first()?->id);
+                            $component->state($record->roles->first()?->name);
                         }
                     })
-                    ->dehydrated(false)
+                    // ->dehydrated(false)
                     ->required(),
                 TextInput::make('email')
                     ->label('Email address')
                     ->email()
                     ->required(),
-                DateTimePicker::make('email_verified_at'),
                 TextInput::make('password')
                     ->password(),
             ]);

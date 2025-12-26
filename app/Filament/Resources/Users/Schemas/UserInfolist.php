@@ -15,24 +15,15 @@ class UserInfolist
                 TextEntry::make('last_name'),
                 TextEntry::make('email')
                     ->label('Email address'),
-                TextEntry::make('email_verified_at')
-                    ->dateTime()
-                    ->placeholder('-'),
+                TextEntry::make('roles.name')
+                    ->label('Role')
+                    ->formatStateUsing(fn ($record) => $record?->roles?->first()?->name ?? '-'),
                 TextEntry::make('created_at')
                     ->dateTime()
                     ->placeholder('-'),
                 TextEntry::make('updated_at')
                     ->dateTime()
-                    ->placeholder('-'),
-                TextEntry::make('two_factor_secret')
                     ->placeholder('-')
-                    ->columnSpanFull(),
-                TextEntry::make('two_factor_recovery_codes')
-                    ->placeholder('-')
-                    ->columnSpanFull(),
-                TextEntry::make('two_factor_confirmed_at')
-                    ->dateTime()
-                    ->placeholder('-'),
             ]);
     }
 }
