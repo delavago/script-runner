@@ -17,6 +17,8 @@ class Script extends Model
         'file_type',
         'attachment',
         'active',
+        'use_credentials',
+        'credential_id',
     ];
 
     /**
