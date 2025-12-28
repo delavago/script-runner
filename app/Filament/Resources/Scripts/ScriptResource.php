@@ -20,7 +20,9 @@ class ScriptResource extends Resource
 {
     protected static ?string $model = Script::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static ?int $navigationSort = 1;
+
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::CommandLine;
 
     protected static ?string $recordTitleAttribute = 'Scripts';
 

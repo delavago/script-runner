@@ -22,8 +22,10 @@ class ExecutionLogResource extends Resource
     protected static ?string $navigationLabel = 'Logs';
     protected static ?string $breadcrumb = "Logs";
 
+    protected static ?int $navigationSort = 2;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::BookOpen;
 
     protected static ?string $recordTitleAttribute = 'Log';
 
