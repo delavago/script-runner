@@ -18,6 +18,12 @@ class ScriptInfolist
                 TextEntry::make('file_type'),
                 IconEntry::make('active')
                     ->boolean(),
+                IconEntry::make('use_credentials')
+                    ->label('Uses Credentials')
+                    ->boolean(),
+                TextEntry::make('credential.name')
+                    ->label('Credential')
+                    ->placeholder('-'),
                 TextEntry::make('created_at')
                     ->dateTime()
                     ->placeholder('-'),

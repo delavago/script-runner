@@ -22,15 +22,6 @@ class CredentialsTable
                     ->searchable(),
                 TextColumn::make('type')
                     ->searchable(),
-                TextColumn::make('username')
-                    ->searchable(),
-                TextColumn::make('host')
-                    ->searchable(),
-                TextColumn::make('port')
-                    ->numeric()
-                    ->sortable(),
-                TextColumn::make('domain')
-                    ->searchable(),
                 IconColumn::make('active')
                     ->boolean(),
                 TextColumn::make('created_at')
