@@ -35,4 +35,9 @@ class Script extends Model
     {
         return $this->hasMany(ExecutionLog::class);
     }
+
+    public function credential()
+    {
+        return $this->belongsTo(Credential::class);
+    }
 }
