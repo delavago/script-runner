@@ -37,6 +37,8 @@ class CreateAdminUser extends Command
             'password' => $password,
         ]);
 
+        $user->assignRole('Admin');
+
         $this->info("Admin user {$user->email} created successfully.");
 
     }
