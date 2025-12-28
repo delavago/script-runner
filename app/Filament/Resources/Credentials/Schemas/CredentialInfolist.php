@@ -18,13 +18,14 @@ class CredentialInfolist
                 TextEntry::make('type'),
                 TextEntry::make('username')
                     ->placeholder('-'),
+                TextEntry::make('password')
+                    ->placeholder('-'),
                 TextEntry::make('private_key')
                     ->placeholder('-')
                     ->columnSpanFull(),
                 TextEntry::make('host')
                     ->placeholder('-'),
                 TextEntry::make('port')
-                    ->numeric()
                     ->placeholder('-'),
                 TextEntry::make('domain')
                     ->placeholder('-'),

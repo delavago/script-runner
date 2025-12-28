@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\Scripts\Schemas;
 
 use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\Toggle;
@@ -71,6 +72,26 @@ class ScriptForm
                         TextInput::make('file_type')
                             ->readonly()
                             ->required(),
+                    ]),
+                    Section::make()
+                    ->schema([
+                        Toggle::make('use_credentials')
+                            ->label('Use Credentials')
+                            ->live(),
+                        Select::make('credential_id')
+                            ->label('Select Credential')
+                            ->options(function () {
+                                $credentials = \App\Models\Credential::all();
+                                $options = [];
+                                foreach ($credentials as $credential) {
+                                    $options[$credential->id] = $credential->name;
+                                }
+                                return $options;
+                            })
+                            ->searchable()
+                            ->preload()
+                            ->nullable()
+                            ->visible(fn (callable $get) => $get('use_credentials') === true)
                     ]),
 
             ]);

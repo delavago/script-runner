@@ -28,6 +28,7 @@ class CredentialForm
                 TextInput::make('password')
                 ->password()
                 ->revealable(),
+                TextInput::make('database'),
                 Textarea::make('private_key')
                     ->columnSpanFull(),
                 TextInput::make('host'),
