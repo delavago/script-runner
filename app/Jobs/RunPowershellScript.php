@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Models\ExecutionLog;
+use App\Models\Script;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -38,6 +39,53 @@ class RunPowershellScript implements ShouldQueue
             throw new \RuntimeException("Script not found: {$this->scriptPath}");
         }
 
+        $script = Script::with('credential')->find($this->scriptId);
+        $credentialParams = [];
+
+        Log::info('Script details: ', ['script' => $script]);
+
+        if ($script && $script->use_credentials && $script->credential) {
+            $credential = $script->credential;
+            Log::info($credential);
+            
+            if ($credential->username) {
+                $credentialParams[] = '-Username';
+                $credentialParams[] = $credential->username;
+            }
+            
+            if ($credential->password) {
+                $credentialParams[] = '-Password';
+                $credentialParams[] = $credential->password;
+            }
+            
+            if ($credential->host) {
+                $credentialParams[] = '-HostName';
+                $credentialParams[] = $credential->host;
+            }
+            
+            if ($credential->port) {
+                $credentialParams[] = '-Port';
+                $credentialParams[] = $credential->port;
+            }
+            
+            if ($credential->domain) {
+                $credentialParams[] = '-Domain';
+                $credentialParams[] = $credential->domain;
+            }
+            
+            if ($credential->database) {
+                $credentialParams[] = '-Database';
+                $credentialParams[] = $credential->database;
+            }
+            
+            if ($credential->private_key) {
+                $credentialParams[] = '-PrivateKey';
+                $credentialParams[] = $credential->private_key;
+            }
+        }
+
+        Log::info('Credential Params: ', $credentialParams);
+
         $binary = PHP_OS_FAMILY === 'Windows' ? 'powershell' : 'pwsh';
 
         $command = array_merge([
@@ -48,7 +96,7 @@ class RunPowershellScript implements ShouldQueue
             'Bypass',
             '-File',
             $this->scriptPath,
-        ], $this->args);
+        ], $credentialParams, $this->args);
 
         $process = new Process($command);
         $process->setTimeout(null);

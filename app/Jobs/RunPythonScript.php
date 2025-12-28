@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Models\ExecutionLog;
+use App\Models\Script;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -38,12 +39,41 @@ class RunPythonScript implements ShouldQueue
             throw new \RuntimeException("Script not found: {$this->scriptPath}");
         }
 
+        $script = Script::with('credential')->find($this->scriptId);
+        $credentialParams = [];
+
+        if ($script && $script->use_credentials && $script->credential) {
+            $credential = $script->credential;
+            
+            if ($credential->username) {
+                $credentialParams[] = '--Username=' . $credential->username;
+            }
+            if ($credential->password) {
+                $credentialParams[] = '--Password=' . $credential->password;
+            }
+            if ($credential->host) {
+                $credentialParams[] = '--HostName=' . $credential->host;
+            }
+            if ($credential->port) {
+                $credentialParams[] = '--Port=' . $credential->port;
+            }
+            if ($credential->domain) {
+                $credentialParams[] = '--Domain=' . $credential->domain;
+            }
+            if ($credential->database) {
+                $credentialParams[] = '--Database=' . $credential->database;
+            }
+            if ($credential->private_key) {
+                $credentialParams[] = '--PrivateKey=' . $credential->private_key;
+            }
+        }
+
         $binary = 'python3';
 
         $command = array_merge([
             $binary,
             $this->scriptPath,
-        ], $this->args);
+        ], $credentialParams, $this->args);
 
         $process = new Process($command);
         $process->setTimeout(null);
