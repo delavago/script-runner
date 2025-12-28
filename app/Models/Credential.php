@@ -19,5 +19,6 @@ class Credential extends Model
         'domain',
         'description',
         'active',
+        'database',
     ];
 }
